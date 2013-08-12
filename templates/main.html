@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row-fluid">
+	<div class="span3" id="authors">
+		<table class="table table-bordered">
+			<thead>
+				<tr bgcolor="#E0E0E0">
+					<th>Our Authors</th>
+					<th style="width: 16px"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for author in authors_list %}
+				<tr>
+					<td><a href="/{{ author.id }}">{{ author.name }}</a></td><th style="width: 16px"><a href="/{{ author.id }}" title="Show all books"><i class="icon-book"></i></a></th>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		{% if USER %}
+		<div id="admin_zone" style="margin-top: 40px">
+			<table class="table table-bordered">
+				<thead>
+					<tr bgcolor="#E0E0E0">
+						<th>Users</th>
+						<th style="width: 16px"><a href="/add_user" title="Add new user"><i class="icon-plus"></i></a></th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for person in persons %}
+					<tr>
+						<td>{{ person.name }}</td><td><a href="mailto:{{ person.email }}?subject=Request from library" title="Mail to {{ person.name }}"><i class="icon-envelope"></i></a></td>
+					</tr>
+					{% endfor%}
+				</tbody>
+			</table>
+		</div>
+		{% endif %}
+	</div>
+
+	<div class="span9" id="books">
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr bgcolor="#E0E0E0">
+					<th>Last added Books</th><th style="width: 20px">{% if USER %}<a href="/books_all" title="Search authors"><i class="icon-align-justify"></i></a>{% endif %}</th>
+					<th>Authors</th><th style="width: 20px">{% if USER %}<a href="/authors_all" title="Search books"><i class="icon-align-justify"></i></a>{% endif %}</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				{% for book in books_main %}
+				<tr>
+					<td colspan="2">{{ book.0 }}</td>
+					<td colspan="2">{% for b in book.1%} <i class="icon-book"></i>&nbsp{{ b|safe }}&nbsp&nbsp&nbsp
+					{% endfor %}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<div id="search_form" style="margin: 40 0 0 0">
+			<form id='search' method="POST">
+				Search:
+				<input type="text" class="input-xlarge search-query" name="text_box" />
+				<input class="btn-mini btn-info" type="submit" value="GO" />
+			</form>
+			{% if search_result %}
+			Search results for <strong>{{ search_query }}</strong>:
+			<div id="results">
+				{% for search in search_result%}
+				{{ search|safe }}
+				<br>
+				{% endfor%}
+			</div>
+			{% elif search_is %}
+			No results for <strong>{{ search_query }}</strong>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

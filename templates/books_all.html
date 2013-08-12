@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="search_form" style="margin: 40 0 0 0">
+	<form id="search-form" action="{{ request.path }}" method="POST">
+		Search book:
+		<input type="text" class="input-xlarge search-query" name="search" />
+		<input class="btn-mini btn-info" type="submit" value="GO" />
+	</form>
+</div>
+<div id="authors">
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr  bgcolor="#E0E0E0">
+				<th>Books</th>{% if USER %}<th style="width: 16px"></th><th style="width: 16px"></th>{% endif %}
+			</tr>
+		</thead>
+		<tbody>
+
+			{% for book in books_main %}
+			<tr>
+				<td>{{ book.0 }}&nbsp&nbsp<font size="1">({% for b in book.1%}&nbsp{{ b|safe }}&nbsp&nbsp{% endfor %})</font></td>
+				{% if USER %}<td>
+					<a href="#" class="book-edit-btn" id="{{ book.0 }}-{{ book.0.id }}" title="Edit book"><i class="icon-edit"></i></a>
+				</td>
+				<td>
+					<a href="#" class="book-delete-btn" id="{{ book.0.id }}" title="Delete book"><i class="icon-remove"></i></a>
+				</td>{% endif %}
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	
+<!-- Modal -->
+<div id="edit_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <form id="edit_from" method="POST">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Rename book</h3>
+  </div>
+  <div class="modal-body">
+    <input type="text" id="input_name" name="input_new_name" class="input-xlarge" placeholder="" />
+  </div>
+  <div class="modal-footer">
+  	<input type="hidden" name='edit_hidden_input' value="" id="edit_hidden" />
+    <input type="button" class="btn" data-dismiss="modal" aria-hidden="true" value="Cancel" />
+    <input class="btn btn-primary" type="submit" value="Save changes" />
+    
+  </div>
+  </form>
+</div>
+	
+</div>
+
+<script type="text/javascript">
+	$('.book-delete-btn').click(function() {
+	$.post("{{ request.path }}", { elem_id: $(this).attr('id') },
+	function(data){
+		location.reload()
+	});
+	});
+	
+		$('.book-edit-btn').click(function() {
+		$('#edit_hidden').attr('value', $(this).attr('id').split('-')[1])
+		$('#input_name').attr('placeholder', $(this).attr('id').split('-')[0])
+		$('#edit_modal').modal('show')
+	})
+</script>
+{% endblock %}

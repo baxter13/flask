@@ -1,0 +1,23 @@
+{% from "macro.html" import render_field %}
+{% extends 'base.html' %}
+{% block content %}
+<div>
+	<table class="table table-bordered">
+		<tr>
+			<td><strong>Add new author to Library</strong></td>
+		</tr>
+		<tr>
+			<td>
+			<form id="add_author" method="POST" action="/add_author/">
+				{{ render_field(form.author_name) }}
+				<input type="submit" class="btn btn-success" value="Add" />
+			</form></td>
+		</tr>
+		{% if ER_MESSAGE %}
+		<tr>
+			<td><font color="red">{{ ER_MESSAGE }}</font></td>
+		</tr>
+		{% endif %}
+	</table>
+</div>
+{% endblock %}

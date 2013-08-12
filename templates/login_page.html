@@ -1,0 +1,24 @@
+{% from "macro.html" import render_field %}
+{% extends 'base.html' %}
+{% block content %}
+<div>
+	<table class="table table-bordered">
+		<tr>
+			<td><strong>Please input your name and password below:</strong></td>
+		</tr>
+		<tr>
+			<td>
+			<form action="" method="post" class="form-inline">
+				<input type="text" name="user_name" placeholder="Name">
+				<input type="password" name="user_password" placeholder="Password">
+				<input type="submit" value="Login" class="btn btn-info">
+			</form></td>
+		</tr>
+		{% if ER_MESSAGE %}
+		<tr>
+			<td><font color="red">{{ ER_MESSAGE }}</font></td>
+		</tr>
+		{% endif %}
+	</table>
+</div>
+{% endblock %}

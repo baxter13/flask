@@ -1,0 +1,67 @@
+{% from "macro.html" import render_field %}
+{% extends 'base.html' %}
+{% block content %}
+			Author: <strong>{{ author }}</strong>
+			{% if books_list %}
+			<div style="padding: 20px 0 0" id="books">
+				<table class="table table-bordered">
+					<thead>
+						<tr bgcolor="#E0E0E0">
+							<th>Books</th>{% if USER %}<th style="width: 16px"></th>{% endif %}
+						</tr>
+					</thead>
+					<tbody>
+						{% for book in books_list %}
+						<tr>
+							<td>{{ book.name }}</td>
+							{% if USER %}<td>
+							<a href="#" class="book-unlink-btn" id="{{ book.id }}" title="Unlink book"><i class="icon-resize-small"></i></a>
+							</td>{% endif %}
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			{% else%}
+			<p style="padding: 20Px 0 0">
+				<i class="icon-exclamation-sign"></i> No books in colection
+			</p>
+			{% endif %}
+			<div id="admin_zone" style="margin-top: 40px">
+				<table class="table table-bordered">
+				<tr><td><strong>Add book and link it with {{ author }}</strong></td></tr>
+				<tr><td><form id="add_book" method="POST" >
+					{{ render_field(form.book_name) }}
+					<input type="submit" class="btn btn-success" value="Add" />
+				</form>
+				</td></tr>
+				</table>
+			</div>
+				
+<!-- Modal -->
+<div id="edit_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">He didn't write this book!</h3>
+  </div>
+  <div class="modal-body">
+  	<font color="red">The Book <strong>will be deleted</strong> if it lost last author after unlinking!</font>
+  </div>
+  <div class="modal-footer">
+  	<form id="edit_from" method="POST">
+  	<input type="hidden" name='edit_hidden_input' value="" id="edit_hidden" />
+    <input type="button" class="btn" data-dismiss="modal" aria-hidden="true" value="Cancel" />
+    <input class="btn btn-primary" type="submit" value="Unlink" />
+    
+  </div>
+  </form>
+</div>
+
+<script type="text/javascript">	
+		$('.book-unlink-btn').click(function() {
+		$('#edit_hidden').attr('value', $(this).attr('id'))
+		$('#edit_modal').modal('show')
+	})
+</script>
+				
+{% endblock %}

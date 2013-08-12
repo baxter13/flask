@@ -1,0 +1,25 @@
+{% from "macro.html" import render_field %}
+{% extends 'base.html' %}
+{% block content %}
+<div>
+	<table class="table table-bordered">
+		<tr>
+			<td><strong>Please fill form below input your name and password below:</strong></td>
+		</tr>
+		<tr>
+			<td>
+			<form id="add_user" method="POST" action="/add_user/">
+				{{ render_field(form.user_name) }}
+				{{ render_field(form.user_email) }}
+				{{ render_field(form.user_password) }}
+				<input type="submit" class="btn btn-success" value="Add" />
+			</form></td>
+		</tr>
+		{% if ER_MESSAGE %}
+		<tr>
+			<td><font color="red">{{ ER_MESSAGE }}</font></td>
+		</tr>
+		{% endif %}
+	</table>
+</div>
+{% endblock %}
