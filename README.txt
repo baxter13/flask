@@ -16,6 +16,10 @@ Need to install:
 Change settings in settings.py!
 
 --------------
+commit #3
+- Debug mode turned off :)
+- "None" author creation disabled
+--------------
 commit #2
 - Zombie-book (without author) checking fixed
 - Search module on main page fixed

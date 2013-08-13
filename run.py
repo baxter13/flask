@@ -308,6 +308,9 @@ def library_books_all():
 @app.route('/<author_pid>/', methods=['GET', 'POST'])
 def library_author(author_pid):
     
+    if Authors.query.get(author_pid) == None:
+        return redirect(url_for('library_authors_all'))
+    
     form = Addbook_from(request.form)    
     if request.method == 'POST':
         elem_id = None
