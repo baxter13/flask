@@ -14,3 +14,8 @@ Need to install:
 - SQLite3
 
 Change settings in settings.py!
+
+--------------
+commit #2
+- Zombie-book (without author) checking fixed
+- Search module on main page fixed

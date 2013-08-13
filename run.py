@@ -87,6 +87,14 @@ def validator(**inputs):
         return False
     else:
         return True
+
+#CHECK&DELETE FOR ZOMBIES-BOOKS
+def zombie_book():
+    for book in Books.query.all():
+        if Shelfs.query.filter(Shelfs.book_id == book.id).first() == None:
+            db_session.delete(book)
+    db_session.commit()
+
     
 #MAIN PAGE
 @app.route('/', methods=['GET', 'POST'])
@@ -118,8 +126,11 @@ def library_main():
         search_is = True
         search = request.form['text_box']
         if search:
-            search_result += ['Author: <a href=\"'+str(author.id)+'\">'+str(author)+'</a>' for author in Authors.query.filter(Authors.name.like('%'+search+'%'))]
-            search_result += ['Book: '+str(book) for book in Books.query.filter(Books.name.like('%'+search+'%'))]
+            try:
+                search_result += ['Author: <a href=\"'+str(author.id)+'\">'+str(author)+'</a>' for author in Authors.query.filter(Authors.name.like('%'+search+'%'))]
+                search_result += ['Book: '+str(book) for book in Books.query.filter(Books.name.like('%'+search+'%'))]
+            except:
+                pass
         else:
             search_is = False
 
@@ -180,13 +191,8 @@ def library_authors_all():
             for author in Shelfs.query.filter(Shelfs.author_id == elem_id):
                 db_session.delete(author)
             db_session.commit()
-     
-     #CHECK&DELETE FOR ZOMBIES-BOOKS 
-            for book in Books.query.all():
-                if Shelfs.query.filter(Shelfs.book_id == book.id).first() == None:
-                    db_session.delete(book)
-            db_session.commit()
-            return elem_id
+            
+            zombie_book()
 
      #SEARCH AUTHOR
         try:
@@ -315,9 +321,11 @@ def library_author(author_pid):
         if elem_id:
             book = Books.query.get(elem_id)
             shelf = Shelfs.query.filter(Shelfs.book_id == book.id, Shelfs.author_id == author_pid).first()
-            db_session.delete(shelf)           
-            db_session.commit()        
-    
+            db_session.delete(shelf)
+            db_session.commit()
+            
+            zombie_book()
+            
     #ADD&LINK NEW BOOK TO AUTHOR
         try:
             book_name = form.book_name.data
